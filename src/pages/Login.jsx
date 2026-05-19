@@ -4,12 +4,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSession } from '../hooks/useSession'
 import { useToast } from '../hooks/useToast'
 import { getStudents, getCompanies } from '../utils/storage'
-import { Shield, Users, Building2, Key, Mail, Sparkles, ArrowLeft } from 'lucide-react'
+import { Shield, Users, Building2, Key, Mail, Sparkles, ArrowLeft, Eye, EyeOff } from 'lucide-react'
 
 export default function Login() {
   const [activeTab, setActiveTab] = useState('student'); // student | company | admin
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   
   const { setSession } = useSession();
@@ -99,8 +100,8 @@ export default function Login() {
           <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-white shadow-md mx-auto font-sora text-base mb-4">
             S
           </div>
-          <h2 className="text-xl font-bold font-sora text-slate-900">Console Access</h2>
-          <p className="text-xs text-slate-500 mt-2">Sign in to manage drives, prepare interviews, or analyze matches.</p>
+          <h2 className="text-xl font-bold font-sora text-slate-900">SmartHire AI</h2>
+          <p className="text-xs text-slate-500 mt-2">Next-Gen Campus Placements</p>
         </div>
 
         {/* Role Tabs */}
@@ -170,28 +171,26 @@ export default function Login() {
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Password</label>
-              {activeTab === 'admin' && (
-                <span className="text-[10px] text-indigo-600 font-bold">Hint: pass is admin123</span>
-              )}
-              {activeTab === 'student' && (
-                <span className="text-[10px] text-indigo-600 font-bold">Hint: pass is pass@123</span>
-              )}
-              {activeTab === 'company' && (
-                <span className="text-[10px] text-indigo-600 font-bold">Hint: pass is msft@123 or tcs@123</span>
-              )}
             </div>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                 <Key size={16} />
               </span>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-slate-50/50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+                className="w-full bg-slate-50/50 border border-slate-200 rounded-xl pl-10 pr-10 py-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
             </div>
           </div>
 
@@ -204,18 +203,6 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Self-registration prompts */}
-        {activeTab !== 'admin' && (
-          <div className="text-center mt-6 pt-6 border-t border-slate-100">
-            <span className="text-xs text-slate-500">Don't have an account? </span>
-            <Link
-              to={activeTab === 'student' ? '/register/student' : '/register/company'}
-              className="text-xs text-indigo-600 font-bold hover:underline"
-            >
-              Sign up here
-            </Link>
-          </div>
-        )}
       </div>
     </div>
   );
